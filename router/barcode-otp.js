@@ -36,7 +36,6 @@ const getBarcode = (req, res) => {
             .header('Content-Type', 'image/svg')
             .header('Content-disposition', `attachment; filename=${encodeURI('barcode.svg')}`)
             .send(xmlSerializer.serializeToString(svgNode));
-        console.log(barcode);
         return;
     })
     .catch((err) => {

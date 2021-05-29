@@ -1,6 +1,6 @@
 import express from 'express';
 import axios from 'axios';
-import { stringify } from 'qs';
+import QueryString, { stringify } from 'qs';
 import dotenv from 'dotenv';
 
 const router = express.Router();
@@ -36,6 +36,7 @@ router.get('/kakao/callback', async(req,res)=>{
             code:req.query.code,
         })//객체를 string 으로 변환
     })
+    console.log(token);
     }catch(err){
         res.json(err.data);
     }
@@ -53,13 +54,39 @@ router.get('/kakao/callback', async(req,res)=>{
         req.session.kakao = {"user": user.data, "token": token.data};
         res.json(user.data);
     }catch(e){
-        res.json(e.data);
+        res.status(401).json(e.data);
         return;
     }
 
     // res.redirect('/');
     //req.session = {['kakao'] : user.data};
 });
+
+router.post('/kakao/refresh', async(req, res) => {  //재활용할 코드임
+    let token;
+    try {
+        console.log('/kakao/refresh ', req.body.refresh_token, kakao);
+        token = await axios({
+            method: 'post',
+            url: 'https://kauth.kakao.com/oauth/token',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            data: QueryString.stringify({
+                grant_type: 'refresh_token',
+                client_id: kakao.clientID,
+                client_secret: kakao.clientSecret,
+                refresh_token: req.body.refresh_token
+            })
+        })
+
+        console.log(token);       
+    }
+    catch(e) {
+        res.status(401).json(e.data);
+        return;
+    }
+}); 
 
 router.get('/kakao/logout', async (req, res) => {
     try{
@@ -78,14 +105,6 @@ router.get('/kakao/logout', async (req, res) => {
         res.json(e.data);
         return;
     }
-});
-
-
-router.get('/info',(req,res)=>{
-    let {nickname,profile_image} = req.session.kakao.user.properties;
-    res.render('info',{
-        nickname,profile_image,
-    })
 });
 
 export default router;

@@ -20,6 +20,7 @@ configure('views',{
 
 app.use(logger('dev'));
 app.use(express.json());
+
 app.use(session({
     secret: process.env.SECRET_KEY,
     resave: false,
