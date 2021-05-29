@@ -13,9 +13,11 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
+    "jsbarcode": "^3.11.4",
     "mongoose": "^5.12.11",
     "morgan": "^1.10.0",
     "nunjucks": "^3.2.3",
-    "qs": "^6.10.1"
+    "qs": "^6.10.1",
+    "xmldom": "^0.6.0"
   }
 }

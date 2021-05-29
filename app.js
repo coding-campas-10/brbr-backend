@@ -5,6 +5,7 @@ import pkg from 'nunjucks';
 import logger from 'morgan';
 import MongoSession from 'connect-mongo';
 
+import database from './database/connect.js';
 import Route from './router/route.js';
 
 const { configure } = pkg;
@@ -18,6 +19,7 @@ configure('views',{
 })
 
 app.use(logger('dev'));
+app.use(express.json());
 app.use(session({
     secret: process.env.SECRET_KEY,
     resave: false,
