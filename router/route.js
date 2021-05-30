@@ -8,6 +8,6 @@ import stationRoute from './station.js';
 
 router.use('/otp', otpCodeRoute);
 router.use('/auth', authRoute);
-router.use('/station', stationRoute);
+router.use('/stations', stationRoute);
 
 export default router;

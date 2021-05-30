@@ -8,14 +8,12 @@ const addNewStation = async (req, res) => {
     try{
         const user = await usersDB.findOne({id: req.session.kakao.user.id});
         if(!(user.isAdmin === true)){
-            res.status(401).send('권한 없음');
-            return;
+            throw new Error('권한이 없는 사용자입니다.');
         }
         const body = req.body;
         const newStation= new stationDB ({
-            //Unique한 ID를 발급해야함
             name: body.name,
-            stationID: body.station_id,
+            stationID: body.stationID, // Unique한 ID를 발급해야함 근데 어떻게 하는지 모름
             description: body.description,
             location: { 
                 latitude: body.location.latitude,
@@ -36,7 +34,7 @@ const addNewStation = async (req, res) => {
 const getAllStations = async (req, res) => {
     try{
         const stations = await stationDB.find();
-        stations.forEach((station) => console.log(station));
+        res.status(200).json({stations: stations});
     }
     catch(e){
         res.status(401).send();
@@ -54,10 +52,30 @@ const getDetailStation = async (req, res) => {
     }
 }
 
+const updateStation = async (req, res) => {
+    try{
+        await stationDB.updateOne({stationID: req.params.id}, req.body);
+        res.status(201).send();
+    }
+    catch(e){
+        res.status(401).send('대상이 없거나 삭제할 수 없습니다.');
+    }
+}
+
+const deleteStation = async (req, res) => {
+    try{
+        await stationDB.deleteOne({stationID: req.params.id});
+        res.status(204).send();
+    }
+    catch(e){
+        res.status(401).send('대상이 없거나 삭제할 수 없습니다.');
+    }
+}
+
 router.post('/', addNewStation ) ;    //새 스테이션 등록
-router.get('/all', getAllStations );   //모든 스테이션 정보 조회
-// router.get('/detail/:id', );    //스테이션별 상세 정보 조회
-// router.put('/station/:id', );   //id 스테이션 정보 수정
-// router.delete('/station/:id', );    //id 스테이션 정보 삭제
+router.get('/', getAllStations );   //모든 스테이션 정보 조회
+router.get('/:id', getDetailStation);    //id 스테이션 상세 정보 조회
+router.put('/:id', updateStation);   //id 스테이션 정보 수정
+router.delete('/:id', deleteStation);    //id 스테이션 정보 삭제
 
 export default router;

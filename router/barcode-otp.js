@@ -10,7 +10,7 @@ const svgNode = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 
 const router = express.Router();
 
-const getBarcode = (req, res) => {
+const getBarcode = async (req, res) => {
     try {
         const uid= req.session.kakao.user.id;
     }
@@ -29,18 +29,18 @@ const getBarcode = (req, res) => {
         otp_code: barcode,
         createdAt: new Date()
     })
-    newCode.save()
-    .then(() => {
+    try{
+        await newCode.save()
         res
             .status(200)
             .header('Content-Type', 'image/svg')
             .header('Content-disposition', `attachment; filename=${encodeURI('barcode.svg')}`)
             .send(xmlSerializer.serializeToString(svgNode));
         return;
-    })
-    .catch((err) => {
+    }
+    catch(e){
         res.status(401).send();
-    });
+    }
 }
 
 const authBarcode = (req, res) => {
