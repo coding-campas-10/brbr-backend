@@ -2,6 +2,7 @@ import express from 'express';
 import axios from 'axios';
 import QueryString, { stringify } from 'qs';
 import dotenv from 'dotenv';
+import userDB from '../database/models/userSchema.js'
 
 const router = express.Router();
 
@@ -36,7 +37,6 @@ router.get('/kakao/callback', async(req,res)=>{
             code:req.query.code,
         })//객체를 string 으로 변환
     })
-    console.log(token);
     }catch(err){
         res.json(err.data);
     }
@@ -51,9 +51,28 @@ router.get('/kakao/callback', async(req,res)=>{
                 Authorization: `Bearer ${token.data.access_token}`
             }//헤더에 내용을 보고 보내주겠다.
         })
-        req.session.kakao = {"user": user.data, "token": token.data};
-        res.json(user.data);
+        console.log(user.data);
+        try{
+            const exUser = await userDB.findOne({id: user.id});
+            if(!exUser) throw new Error('ㅁㄴㅇㄹ');
+            req.session.kakao = {"user": user.data, "token": token.data};
+            res.status(200).json(exUser);
+            return;
+        }
+        catch(e){
+            const regesterUser = new userDB({
+                id: user.data.id,
+                name: user.data.properties.nickname,
+                connected_at: user.data.connected_at,
+                isAdmin: false
+            });
+            await regesterUser.save();
+            req.session.kakao = {"user": user.data, "token": token.data};
+            res.status(200).json(user.data);
+            return;
+        }
     }catch(e){
+        console.log(e);
         res.status(401).json(e.data);
         return;
     }
@@ -65,7 +84,6 @@ router.get('/kakao/callback', async(req,res)=>{
 router.post('/kakao/refresh', async(req, res) => {  //재활용할 코드임
     let token;
     try {
-        console.log('/kakao/refresh ', req.body.refresh_token, kakao);
         token = await axios({
             method: 'post',
             url: 'https://kauth.kakao.com/oauth/token',
@@ -79,8 +97,7 @@ router.post('/kakao/refresh', async(req, res) => {  //재활용할 코드임
                 refresh_token: req.body.refresh_token
             })
         })
-
-        console.log(token);       
+      
     }
     catch(e) {
         res.status(401).json(e.data);

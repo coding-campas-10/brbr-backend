@@ -25,7 +25,7 @@ const getBarcode = (req, res) => {
     });
 
     const newCode = new otpDB ({
-        id: req.session.kakao.user.id,
+        user_id: req.session.kakao.user.id,
         otp_code: barcode,
         createdAt: new Date()
     })
