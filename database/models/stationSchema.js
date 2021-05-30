@@ -1,13 +1,23 @@
 import mongoose from 'mongoose';
+import autoIncrement from 'mongoose-auto-increment';
 
-const stationSchema = mongoose.model('stations', new mongoose.Schema({
+const stationSchema = new mongoose.Schema({
     name: { type: String, required: true, unique: false },
-    stationID: { type: Number, required: true, unique: true },
+    station_id: { type: Number, required: true, unique: true },
     description: { type: String, required: true, unique: true },
     location: {
         latitude: { type: Number, required: true, unique: false },
         longitude: { type: Number, required: true, unique: false }
     }
-}));
+});
 
-export default stationSchema;
+stationSchema.plugin(autoIncrement.plugin, {
+    model : 'stations', 
+    field : 'station_id', 
+    startAt : 1, //시작 
+    increment : 1 // 증가
+});
+
+const stations = mongoose.model('stations', stationSchema);
+
+export default stations;

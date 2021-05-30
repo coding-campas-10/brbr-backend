@@ -16,6 +16,7 @@
     "haversine-distance": "^1.2.1",
     "jsbarcode": "^3.11.4",
     "mongoose": "^5.12.11",
+    "mongoose-auto-increment": "^5.0.1",
     "morgan": "^1.10.0",
     "nunjucks": "^3.2.3",
     "qs": "^6.10.1",

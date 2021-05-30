@@ -13,7 +13,7 @@ const addNewStation = async (req, res) => {
         const body = req.body;
         const newStation= new stationDB ({
             name: body.name,
-            stationID: body.stationID, // Unique한 ID를 발급해야함 근데 어떻게 하는지 모름
+            station_id: body.station_id, // Unique한 ID를 발급해야함 근데 어떻게 하는지 모름
             description: body.description,
             location: { 
                 latitude: body.location.latitude,
@@ -44,17 +44,18 @@ const getAllStations = async (req, res) => {
 
 const getDetailStation = async (req, res) => {
     try{
-        const station = await stationDB({stationID: req.params.id});
+        const station = await stationDB({station_id: req.params.id});
+        res.status(200).json(station);
     }
     catch(e){
-        res.status(401).send('대상을 찾을 수 없습니다');
+        res.status(401).send('대상을 찾을 수 없습니다.');
         return;
     }
 }
 
 const updateStation = async (req, res) => {
     try{
-        await stationDB.updateOne({stationID: req.params.id}, req.body);
+        await stationDB.updateOne({station_id: req.params.id}, req.body);
         res.status(201).send();
     }
     catch(e){
@@ -64,7 +65,7 @@ const updateStation = async (req, res) => {
 
 const deleteStation = async (req, res) => {
     try{
-        await stationDB.deleteOne({stationID: req.params.id});
+        await stationDB.deleteOne({station_id: req.params.id});
         res.status(204).send();
     }
     catch(e){

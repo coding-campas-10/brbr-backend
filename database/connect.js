@@ -1,8 +1,10 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import autoIncrement from 'mongoose-auto-increment';
 
 dotenv.config('../');
 mongoose.Promise = global.Promise;
+autoIncrement.initialize(mongoose.connection);
 
 mongoose
     .connect(process.env.MONGODB_URI , {
