@@ -19,5 +19,4 @@ stationSchema.plugin(autoIncrement.plugin, {
 });
 
 const stations = mongoose.model('stations', stationSchema);
-
 export default stations;

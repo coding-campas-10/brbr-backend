@@ -51,10 +51,10 @@ router.get('/kakao/callback', async(req,res)=>{
                 Authorization: `Bearer ${token.data.access_token}`
             }//헤더에 내용을 보고 보내주겠다.
         })
-        console.log(user.data);
         try{
-            const exUser = await userDB.findOne({id: user.id});
-            if(!exUser) throw new Error('DB에 사용자가 없음');
+            const exUser = await userDB.findOne({id: user.data.id});
+            if(!exUser) { throw new Error('DB에 사용자가 없음'); }
+                
             req.session.kakao = {"user": user.data, "token": token.data};
             res.status(200).json(exUser);
             return;
