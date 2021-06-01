@@ -26,7 +26,7 @@ app.use(session({
     resave: false,
     secure: false,
     saveUninitialized: true,
-    cookie: {maxAge: 1000 * 60 * 60 * 24 * 30 * 6}, //만료 시간 6개월
+    cookie: {maxAge: parseInt(process.env.SESSION_EXPIRE)}, //만료 시간 6개월
     store: MongoSession.create({
         mongoUrl: process.env.MONGODB_URI
     })
