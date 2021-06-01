@@ -17,12 +17,12 @@ const addNewAnnounce = async (req, res) => {
         })
         await newStation.save();
         res.status(200).send();
-        return;
+         
     }
     catch(e){
         console.log(e);
         res.status(401).send();
-        return;
+         
     }
 }
 const getAllAnnounces = async (req, res) => {
@@ -32,17 +32,17 @@ const getAllAnnounces = async (req, res) => {
     }
     catch(e){
         res.status(401).send();
-        return;
+        
     }
 }
-const getRecentAnnounce = async (req, res) => {
+const getRecentAnnounce = async (req, res) => { // 가장 최근 announce의 제목과 id만 반환
     try{
-        const announce = await announceDB.findOne().sort({ "created_at": -1 });
+        const announce = await announceDB.findOne({}, {_id: 0, title: 1, announce_id: 1}).sort({ "created_at": -1 });
         res.status(200).json({announce: announce});
     }
     catch(e){
         res.status(401).send();
-        return;
+        
     }
 }
 
@@ -53,7 +53,7 @@ const getDetailAnnounce = async (req, res) => {
     }
     catch(e){
         res.status(401).send('대상을 찾을 수 없습니다.');
-        return;
+        
     }
 }
 

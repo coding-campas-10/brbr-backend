@@ -6,18 +6,17 @@ const router = express.Router();
 
 const addNewStation = async (req, res) => {
     try{
-        const user = await usersDB.findOne({id: req.session.kakao.user.id});
+        const user = await usersDB.findOne({id: req.session.user_id});
         if(!(user.isAdmin === true)){
             throw new Error('권한이 없는 사용자입니다.');
         }
         const body = req.body;
         const newStation= new stationDB ({
             name: body.name,
-            station_id: body.station_id, // Unique한 ID를 발급해야함 근데 어떻게 하는지 모름
             description: body.description,
             location: { 
-                latitude: body.location.latitude,
-                longitude: body.location.longitude
+                type: 'Point',
+                coordinates: [body.location.lng, body.location.lat] //경도, 위도 순서
             }
         })
         await newStation.save();
@@ -31,9 +30,9 @@ const addNewStation = async (req, res) => {
     }
 }
 
-const getAllStations = async (req, res) => {
+const getAllStations = async (req, res) => {    //station ID, station location만 조회
     try{
-        const stations = await stationDB.find();
+        const stations = await stationDB.find({}, {_id: 0, station_id: 1, location: 1});
         res.status(200).json({stations: stations});
     }
     catch(e){
@@ -73,8 +72,37 @@ const deleteStation = async (req, res) => {
     }
 }
 
+const getNearestStation = async (req, res) => {
+    try{
+        const query = (await stationDB.aggregate([{
+            $geoNear: {
+                spherical: true,
+                maxDistance: 10000,
+                near: {
+                  type: 'Point',
+                  coordinates: [req.body.location.lng, req.body.location.lat]
+                },
+                distanceField: 'distance',
+                key: 'location'
+              }
+        }, {
+            $limit: 1
+        }]))[0];
+        query.location= {
+            lat: query.location.coordinates[1],
+            lng: query.location.coordinates[0],
+        }
+        res.status(200).json({station: query});
+    }
+    catch(e){
+        console.log(e);
+        res.status(400).send();
+    }
+}
+
 router.post('/', addNewStation ) ;    //새 스테이션 등록
 router.get('/', getAllStations );   //모든 스테이션 정보 조회
+router.post('/near', getNearestStation);    //가장 가까운 스테이션 정보 조회
 router.get('/:id', getDetailStation);    //id 스테이션 상세 정보 조회
 router.put('/:id', updateStation);   //id 스테이션 정보 수정
 router.delete('/:id', deleteStation);    //id 스테이션 정보 삭제

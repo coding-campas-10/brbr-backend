@@ -54,8 +54,9 @@ router.get('/kakao/callback', async(req,res)=>{
         try{
             const exUser = await userDB.findOne({id: user.data.id});
             if(!exUser) { throw new Error('DB에 사용자가 없음'); }
-                
-            req.session.kakao = {"user": user.data, "token": token.data};
+            
+
+            req.session.user_id = user.data.id;
             res.status(200).json(exUser);
             return;
         }
@@ -67,12 +68,11 @@ router.get('/kakao/callback', async(req,res)=>{
                 isAdmin: false
             });
             await regesterUser.save();
-            req.session.kakao = {"user": user.data, "token": token.data};
+            req.session.user_id = user.data.id;
             res.status(200).json(user.data);
             return;
         }
     }catch(e){
-        console.log(e);
         res.status(401).json(e.data);
         return;
     }
@@ -81,7 +81,7 @@ router.get('/kakao/callback', async(req,res)=>{
     //req.session = {['kakao'] : user.data};
 });
 
-router.post('/kakao/refresh', async(req, res) => {  //재활용할 코드임
+router.get('/kakao/refresh', async(req, res) => {  //재활용할 코드임
     let token;
     try {
         token = await axios({
@@ -94,12 +94,13 @@ router.post('/kakao/refresh', async(req, res) => {  //재활용할 코드임
                 grant_type: 'refresh_token',
                 client_id: kakao.clientID,
                 client_secret: kakao.clientSecret,
-                refresh_token: req.body.refresh_token
+                refresh_token: req.session.kakao.token.refresh_token
             })
         })
-      
+        res.status(200).send(token);
     }
     catch(e) {
+        console.log(e);
         res.status(401).json(e.data);
         return;
     }

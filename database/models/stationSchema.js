@@ -4,10 +4,16 @@ import autoIncrement from 'mongoose-auto-increment';
 const stationSchema = new mongoose.Schema({
     name: { type: String, required: true, unique: false },
     station_id: { type: Number, required: true, unique: true },
-    description: { type: String, required: true, unique: true },
+    description: { type: String, required: true, unique: false },
     location: {
-        latitude: { type: Number, required: true, unique: false },
-        longitude: { type: Number, required: true, unique: false }
+        type: {
+            type: String,
+            enum: ['Point']
+        },
+        coordinates: {
+            type: [Number],
+            index: { type: '2dsphere', sparse: false },
+        },
     }
 });
 

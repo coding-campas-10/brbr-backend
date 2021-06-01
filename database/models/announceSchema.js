@@ -5,7 +5,7 @@ const announceSchema = new mongoose.Schema({
     title: { type: String, required: true, unique: false },
     description: { type: String, required: true, unique: false },
     announce_id: { type: Number, required: true, unique: true },
-    created_at: { type: Date, required: true, unique: false, index: true, default: Date.now }
+    created_at: { type: Date, required: true, unique: false, index: true, sort: -1, default: Date.now }
 });
 
 announceSchema.plugin(autoIncrement.plugin, {
