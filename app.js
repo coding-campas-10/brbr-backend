@@ -5,7 +5,7 @@ import pkg from 'nunjucks';
 import logger from 'morgan';
 import MongoSession from 'connect-mongo';
 
-import database from './database/connect.js';
+import database from './database/connect.js';   // DB연결
 import Route from './router/route.js';
 
 const { configure } = pkg;
@@ -26,6 +26,7 @@ app.use(session({
     resave: false,
     secure: false,
     saveUninitialized: true,
+    cookie: {maxAge: 1000 * 60 * 60 * 24 * 30 * 6}, //만료 시간 6개월
     store: MongoSession.create({
         mongoUrl: process.env.MONGODB_URI
     })
