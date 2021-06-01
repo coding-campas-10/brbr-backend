@@ -2,6 +2,7 @@ import express from 'express';
 import { DOMImplementation, XMLSerializer } from 'xmldom';
 import JsBarcode from 'jsbarcode';
 import otpDB from '../database/models/otpSchema.js';
+import walletDB from '../database/models/walletSchema.js';
 
 const xmlSerializer = new XMLSerializer();
 const document = new DOMImplementation().createDocument('http://www.w3.org/1999/xhtml', 'html', null);
@@ -12,7 +13,7 @@ const router = express.Router();
 
 const getBarcode = async (req, res) => {
     try {
-        const uid= req.session.kakao.user.id;
+        const uid= req.session.user_id;
     }
     catch(e) {
         res.status(401).send(e);
@@ -25,7 +26,7 @@ const getBarcode = async (req, res) => {
     });
 
     const newCode = new otpDB ({
-        user_id: req.session.kakao.user.id,
+        user_id: req.session.user_id,
         otp_code: barcode,
         createdAt: new Date()
     })
@@ -43,15 +44,14 @@ const getBarcode = async (req, res) => {
     }
 }
 
-const authBarcode = (req, res) => {
-    otpDB.findOne({otp_code: req.body.otp})
-        .then((post) => {
-            res.status(200).json(post);
-            return;
-        })
-        .catch((e) => {
-            res.status(401).send(e);
-        })
+const authBarcode = async (req, res) => {
+    try{
+        const queryOtp = await otpDB.findOne({otp_code: req.body.otp});
+        res.status(200).json(await walletDB.findOne({id: queryOtp.user_id}, {_id:0, id:1, name:1}));
+    }
+    catch(e){
+        res.status(401).send('없거나 만료된 토큰입니다.');
+    }
 }
 
 router.get('/', getBarcode);
