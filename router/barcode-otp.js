@@ -24,7 +24,6 @@ const getBarcode = async (req, res) => {
         xmlDocument: document,
         displayValue: false,
     });
-
     const newCode = new otpDB ({
         user_id: req.session.user_id,
         otp_code: barcode,
@@ -47,7 +46,7 @@ const getBarcode = async (req, res) => {
 const authBarcode = async (req, res) => {
     try{
         const queryOtp = await otpDB.findOne({otp_code: req.body.otp});
-        res.status(200).json(await walletDB.findOne({id: queryOtp.user_id}, {_id:0, id:1, name:1}));
+        res.status(200).json(await walletDB.findOne({user_id: queryOtp.user_id}));
     }
     catch(e){
         res.status(401).send('없거나 만료된 토큰입니다.');
