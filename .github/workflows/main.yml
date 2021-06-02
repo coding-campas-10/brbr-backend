@@ -1,0 +1,17 @@
+name: auto deploy
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: [self-hosted, linux]
+
+      steps:
+        - uses: actions/checkout@v1
+        - name: yarn install
+          run:
+            yarn
+            
+        - name: remove bin
+          run:
+            nodemon
