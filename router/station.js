@@ -1,12 +1,12 @@
 import express from 'express';
 import stationDB from '../database/models/stationSchema.js';
-import usersDB from '../database/models/userSchema.js';
+import userDB from '../database/models/userSchema.js';
 
 const router = express.Router();
 
 const addNewStation = async (req, res) => {
     try{
-        const user = await usersDB.findOne({id: req.session.user_id});
+        const user = await userDB.findOne({user_id: req.session.user_id});
         if(!(user.isAdmin === true)){
             throw new Error('권한이 없는 사용자입니다.');
         }

@@ -30,19 +30,6 @@ const login = async (req, res) => {   //우리측 DB와 대조하기만 하면 �
 
 const register = async (req, res) => {  //회원가입 되어있으면 401 반환, 이외 에러는 400 반환, 아니면 userDB와 walletDB 생성하고 200 반환
     try{
-        try{
-            const user = await axios({
-                method:'get',
-                url:'https://kapi.kakao.com/v2/user/me',
-                headers:{
-                    Authorization: `Bearer ${req.body.access_token}`
-                }
-            });
-        }
-        catch(e){
-            throw new Error('카카오 계정 유효성 검증에 실패했습니다.'); 
-        }
-        
         const exUser = await userDB.findOne({user_id: req.body.user_id});
         if(exUser) { throw new Error('이미 등록된 카카오 계정입니다.') };
         
