@@ -1,12 +1,12 @@
 import express from 'express';
 import announceDB from '../database/models/announceSchema.js';
-import usersDB from '../database/models/userSchema.js';
+import userDB from '../database/models/userSchema.js';
 
 const router = express.Router();
 
 const addNewAnnounce = async (req, res) => {
     try{
-        const user = await usersDB.findOne({id: req.session.kakao.user.id});
+        const user = await userDB.findOne({user_id: req.session.user_id});
         if(!(user.isAdmin === true)){
             throw new Error('권한이 없는 사용자입니다.');
         }
@@ -59,7 +59,7 @@ const getDetailAnnounce = async (req, res) => {
 
 const updateAnnounce = async (req, res) => {
     try{
-        const user = await usersDB.findOne({id: req.session.kakao.user.id});
+        const user = await userDB.findOne({user_id: req.session.user_id});
         if(!(user.isAdmin === true)){
             throw new Error('권한이 없는 사용자입니다.');
         }
@@ -73,7 +73,7 @@ const updateAnnounce = async (req, res) => {
 
 const deleteAnnounce = async (req, res) => {
     try{
-        const user = await usersDB.findOne({id: req.session.kakao.user.id});
+        const user = await userDB.findOne({user_id: req.session.user_id});
         if(!(user.isAdmin === true)){
             throw new Error('권한이 없는 사용자입니다.');
         }

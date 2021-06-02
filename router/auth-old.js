@@ -52,23 +52,23 @@ router.get('/kakao/callback', async(req,res)=>{
             }//헤더에 내용을 보고 보내주겠다.
         })
         try{
-            const exUser = await userDB.findOne({id: user.data.id});
+            const exUser = await userDB.findOne({user_id: user.data.user_id});
             if(!exUser) { throw new Error('DB에 사용자가 없음'); }
             
 
-            req.session.user_id = user.data.id;
+            req.session.user_id = user.data.user_id;
             res.status(200).json(exUser);
             return;
         }
         catch(e){
             const regesterUser = new userDB({
-                id: user.data.id,
+                id: user.data.user_id,
                 name: user.data.properties.nickname,
                 connected_at: user.data.connected_at,
                 isAdmin: false
             });
             await regesterUser.save();
-            req.session.user_id = user.data.id;
+            req.session.user_id = user.data.user_id;
             res.status(200).json(user.data);
             return;
         }
