@@ -26,10 +26,11 @@ const makeReceipt = async (req, res) => { //station을 특정할 수 있는 key 
     }
 }
 
-const getReceipt = async (req, res) => {
+const getAllReceipt = async (req, res) => {
     try{
-        const wallet = await walletDB.findOne({user_id: req.session.user_id}, {_id:0, receipts:1});
-        res.status(200).send(wallet)    
+        const wallet = await walletDB.findOne({ user_id: req.session.user_id });
+        const receipts = wallet.receipts.pull();
+        res.status(200).send(receipts);    
     }
     catch(e){
         console.log(e);
@@ -50,7 +51,7 @@ const recentReceipt = async (req, res) => {
 }
 
 router.post('/', makeReceipt);
-router.get('/', getReceipt);
+router.get('/', getAllReceipt);
 router.get('/recent', recentReceipt);
 
 export default router;
