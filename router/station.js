@@ -58,7 +58,7 @@ const updateStation = async (req, res) => {
         res.status(201).send();
     }
     catch(e){
-        res.status(401).send('대상이 없거나 삭제할 수 없습니다.');
+        res.status(401).send('대상이 없거나 수정할 수 없습니다.');
     }
 }
 
@@ -92,7 +92,7 @@ const getNearestStation = async (req, res) => {
             lat: query.location.coordinates[1],
             lng: query.location.coordinates[0],
         }
-        res.status(200).json({station: query});
+        res.status(200).json(query);
     }
     catch(e){
         console.log(e);
