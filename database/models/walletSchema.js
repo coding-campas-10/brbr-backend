@@ -19,7 +19,6 @@ const receiptSchema = new mongoose.Schema({
         index: true, 
         expires: 
         parseInt(process.env.RECEIPT_EXPIRE) ,
-        sort: -1,
         default: Date.now
     },
 });
