@@ -3,10 +3,6 @@ import walletDB from '../database/models/walletSchema.js';
 
 const router = express.Router();
 
-const getPoint = (data) => {
-    
-}
-
 const makeReceipt = async (req, res) => { //station을 특정할 수 있는 key 필요
     try{
         const wallet = await walletDB.findOne({ user_id: req.session.user_id });
