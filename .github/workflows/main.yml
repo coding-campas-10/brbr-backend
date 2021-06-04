@@ -10,7 +10,7 @@ jobs:
     - uses: actions/checkout@v1
 
     - name: Create env file
-        run: |
+        run: 
           touch .env
           echo OTP_EXPIRE=${{ secrets.OTP_EXPIRE }} >> .env
           echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
