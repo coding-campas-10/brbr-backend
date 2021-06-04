@@ -43,7 +43,7 @@ const getAllStations = async (req, res) => {    //station ID, station locationë§
 
 const getDetailStation = async (req, res) => {
     try{
-        const station = await stationDB({station_id: req.params.id});
+        const station = await stationDB.findOne({station_id: req.params.id});
         res.status(200).json(station);
     }
     catch(e){
@@ -88,10 +88,6 @@ const getNearestStation = async (req, res) => {
         }, {
             $limit: 1
         }]))[0];
-        query.location= {
-            lat: query.location.coordinates[1],
-            lng: query.location.coordinates[0],
-        }
         res.status(200).json(query);
     }
     catch(e){
