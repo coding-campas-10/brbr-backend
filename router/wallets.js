@@ -54,25 +54,21 @@ const recentReceipt = async (req, res) => {
     }
 }
 
-const mostFrequentStation = async (req, res) => {
-    try{
-        const wallet = await walletDB.findOne({user_id: req.session.user_id});
-        // const receipt = wallet.receipts.pull();
-        const count = walletDB.aggregate([{
-            $unwind : "$receipts"
-            //$group : { _id : '$user', count : {$sum : 1}}
-        }]).result
+// const mostFrequentStation = async (req, res) => {
+//     try{
+//         const wallet = await walletDB.findOne({user_id: req.session.user_id});
+//         // const receipt = wallet.receipts.pull();
         
-        console.log(count);
-        res.status(200).send();
-    }
-    catch(e){
-        console.log(e);
-        res.status(401).send();
-    }
-}
+//         console.log(count);
+//         res.status(200).send();
+//     }
+//     catch(e){
+//         console.log(e);
+//         res.status(401).send();
+//     }
+// }
 
-router.get('/frequent', mostFrequentStation);
+// router.get('/frequent', mostFrequentStation);
 router.post('/', makeReceipt);
 router.get('/', getAllReceipt);
 router.get('/recent', recentReceipt);
