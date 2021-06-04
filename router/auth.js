@@ -21,7 +21,7 @@ const verifyKakaoToken = async (accessToken) => {
         return user
     }
     catch{
-        throw new Error('카카오 계정 정보를 확인할 수 없습니다')
+        res.status(401).send('카카오 계정 정보를 확인할 수 없습니다');
     }
 };
 
