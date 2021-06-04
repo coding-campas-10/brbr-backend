@@ -18,9 +18,9 @@ const makeReceipt = async (req, res) => { //station을 특정할 수 있는 key 
             styrofoam_weight: req.body.weights.styrofoam,
             etc_weight: req.body.weights.etc,
         })
-        await walletDB.updateOne({ user_id: req.session.user_id }, {
-            total_points: wallet.total_points + 
-        });
+        // await walletDB.updateOne({ user_id: req.session.user_id }, {
+        //     total_points: wallet.total_points + 
+        // });
         await wallet.save()
         res.status(200).send('거래 성공');
     }

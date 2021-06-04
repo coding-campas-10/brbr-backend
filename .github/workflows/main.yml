@@ -10,7 +10,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: yarn install
       run: 
-        yarn start
+        yarn
         
     - name: remove bin
       run:
