@@ -8,6 +8,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+
+    - name: Create env file
+        run: |
+          touch .env
+          echo OTP_EXPIRE=${{ secrets.OTP_EXPIRE }} >> .env
+          echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
+          echo RECEIPT_EXPIRE=${{ secrets.RECEIPT_EXPIRE }} >> .env
+          echo SECRET_KEY=${{ secrets.OTP_EXPIRE }} >> .env
+          echo MONGODB_URI=${{ secrets.MONGODB_URI }} >> .env
+          cat .env
     - name: yarn install
       run: 
         yarn
