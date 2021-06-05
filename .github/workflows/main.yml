@@ -19,4 +19,4 @@ jobs:
         
     - name: remove bin
       run:
-        nodemon
+        yarn start
