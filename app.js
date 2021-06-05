@@ -7,6 +7,7 @@ import MongoSession from 'connect-mongo';
 
 import database from './database/connect.js';   // DB연결
 import Route from './router/route.js';
+import { stream } from './logger.js';
 
 const { configure } = pkg;
 const app = express(); 
@@ -20,6 +21,9 @@ configure('views',{
 
 app.use(logger('dev'));
 app.use(express.json());
+app.use(logger(`HTTP/:http-version :method :remote-addr 
+    :url :remote-user :status :res[content-length] 
+    :referrer :user-agent :response-time ms`, { stream }));
 
 app.use(session({
     secret: process.env.SECRET_KEY,
