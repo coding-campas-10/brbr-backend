@@ -26,7 +26,6 @@ const receiptSchema = new mongoose.Schema({
 const walletSchema = new mongoose.Schema({
     user_id: { type: Number, required: true, unique: true },
     total_points: { type: Number, required: false, unique: false },
-    //월별 배출량은 DB에서 매번 계산
 
     receipts: [receiptSchema]   //subdocument
 });
