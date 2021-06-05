@@ -11,7 +11,7 @@ dotenv.config('../');
 const login = async (req, res) => {   //우리측 DB와 대조하기만 하면 됨, 회원가입 안되어있으면 401 반환
     try{
         const exUser = await userDB.findOne({user_id: req.body.user_id});
-        if(!exUser) { res.status(401).send('등록되지 않은 카카오 계정입니다') };
+        if(!exUser) { res.status(401).send('등록되지 않은 카카오 계정입니다'); return; };
         
         req.session.user_id = req.body.id;
         res.status(200).json(exUser);
@@ -24,11 +24,11 @@ const login = async (req, res) => {   //우리측 DB와 대조하기만 하면 �
 const register = async (req, res) => {  //회원가입 되어있으면 401 반환, 이외 에러는 400 반환, 아니면 userDB와 walletDB 생성하고 200 반환
     try{
         const exUser = await userDB.findOne({user_id: req.body.user_id});    //kakao측 user 데이터쪽에 맞춰서 user_id 대신 id 사용
-        if(exUser) { res.status(401).send('이미 등록된 카카오 계정입니다.') };
+        if(exUser) { res.status(401).send('이미 등록된 카카오 계정입니다.'); return; };
         
         const registerUser = new userDB({
             user_id: req.body.user_id,
-            name: req.bodyn.nickname,
+            name: req.body.nickname,
             connected_at: req.body.connected_at,
             isAdmin: false
         });
