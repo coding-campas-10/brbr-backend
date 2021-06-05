@@ -10,8 +10,8 @@ jobs:
     - uses: actions/checkout@v1
 
     - name: Create env file
-        run: |
-          cp /home/brbr-admin/project/.env /home/brbr-admin/actions-runner/_work/brbr-backend/brbr-backend/.env
+      run: |
+        cp /home/brbr-admin/project/.env /home/brbr-admin/actions-runner/_work/brbr-backend/brbr-backend/.env
           
     - name: yarn install
       run: 
