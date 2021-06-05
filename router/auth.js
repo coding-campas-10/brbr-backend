@@ -27,8 +27,8 @@ const register = async (req, res) => {  //회원가입 되어있으면 401 반�
         if(exUser) { res.status(401).send('이미 등록된 카카오 계정입니다.') };
         
         const registerUser = new userDB({
-            user_id: req.body.id,
-            name: req.body.properties.nickname,
+            user_id: req.body.user_id,
+            name: req.bodyn.nickname,
             connected_at: req.body.connected_at,
             isAdmin: false
         });
