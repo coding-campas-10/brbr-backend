@@ -28,7 +28,7 @@ const verifyKakaoToken = async (accessToken) => {
 const login = async (req, res) => {   //우리측 DB와 대조하기만 하면 됨, 회원가입 안되어있으면 401 반환
     try{
         const user = verifyKakaoToken(req.body.access_token);
-        const exUser = await userDB.findOne({user_id: req.body.id});
+        const exUser = await userDB.findOne({user_id: user.id});
         if(!exUser) { res.status(401).send('등록되지 않은 카카오 계정입니다') };
         
         req.session.user_id = req.body.id;
@@ -42,7 +42,7 @@ const login = async (req, res) => {   //우리측 DB와 대조하기만 하면 �
 const register = async (req, res) => {  //회원가입 되어있으면 401 반환, 이외 에러는 400 반환, 아니면 userDB와 walletDB 생성하고 200 반환
     try{
         const user = verifyKakaoToken(req.body.access_token);
-        const exUser = await userDB.findOne({user_id: req.body.id});    //kakao측 user 데이터쪽에 맞춰서 user_id 대신 id 사용
+        const exUser = await userDB.findOne({user_id: user.id});    //kakao측 user 데이터쪽에 맞춰서 user_id 대신 id 사용
         if(exUser) { res.status(401).send('이미 등록된 카카오 계정입니다.') };
         
         const registerUser = new userDB({
