@@ -25,7 +25,7 @@ const receiptSchema = new mongoose.Schema({
 
 const walletSchema = new mongoose.Schema({
     user_id: { type: Number, required: true, unique: true },
-    total_points: { type: Number, required: false, unique: false },
+    total_points: { type: Number, required: false, unique: false, default: 0 },
 
     receipts: [receiptSchema]   //subdocument
 });
