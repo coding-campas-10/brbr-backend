@@ -2,7 +2,7 @@ import express from 'express';
 import session from 'express-session';
 import dotenv from 'dotenv';
 import pkg from 'nunjucks';
-import logger from 'morgan';
+import morgan from 'morgan';
 import MongoSession from 'connect-mongo';
 
 import database from './database/connect.js';   // DB연결
@@ -19,9 +19,9 @@ configure('views',{
     express:app,
 })
 
-app.use(logger('dev'));
+app.use(morgan('dev'));
 app.use(express.json());
-app.use(logger(`HTTP/:http-version :method :remote-addr 
+app.use(morgan(`HTTP/:http-version :method :remote-addr 
     :url :remote-user :status :res[content-length] 
     :referrer :user-agent :response-time ms`, { stream }));
 
