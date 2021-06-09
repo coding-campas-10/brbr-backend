@@ -1,7 +1,7 @@
 import winston from 'winston';
 import winstonDaily from 'winston-daily-rotate-file';
 
-const logDir = 'logs';  // logs 디렉토리 하위에 로그 파일 저장
+const logDir = '../logs';  // logs 디렉토리 하위에 로그 파일 저장
 const { combine, timestamp, printf } = winston.format;
 
 // Define log format
@@ -41,16 +41,6 @@ const logger = winston.createLogger({
     }),
   ],
 });
-
-// Production 환경이 아닌 경우(dev 등) 
-// if (process.env.NODE_ENV !== 'production') {
-//   logger.add(new winston.transports.Console({
-//     format: winston.format.combine(
-//       winston.format.colorize(),  // 색깔 넣어서 출력
-//       winston.format.simple(),  // `${info.level}: ${info.message} JSON.stringify({ ...rest })` 포맷으로 출력
-//     )
-//   }));
-// }
 
 const stream = {
   write: message => {
