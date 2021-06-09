@@ -30,7 +30,7 @@ const register = async (req, res) => {  //회원가입 되어있으면 401 반�
         
         const registerUser = new userDB({
             user_id: req.body.user_id,
-            name: req.body.nickname,
+            name: req.body.name,
             connected_at: req.body.connected_at,
             isAdmin: false
         });
