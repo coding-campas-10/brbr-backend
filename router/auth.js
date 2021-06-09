@@ -1,6 +1,5 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import axios from 'axios';
 import userDB from '../database/models/userSchema.js';
 import walletDB from '../database/models/walletSchema.js';
 import { logger } from '../logger.js';
@@ -15,6 +14,7 @@ const login = async (req, res) => {   //우리측 DB와 대조하기만 하면 �
         if(!exUser) { return res.status(401).send('등록되지 않은 카카오 계정입니다'); };
         
         req.session.user_id = req.body.user_id;
+        logger.info(`user ${req.body.user_id} login at ${new Date}`);
         res.status(200).json(exUser);
     }
     catch(e){
