@@ -1,5 +1,6 @@
 import express from 'express';
 import walletDB from '../database/models/walletSchema.js';
+import stationDB from '../database/models/stationSchema.js';
 
 const router = express.Router();
 
@@ -52,6 +53,7 @@ const recentReceipt = async (req, res) => {
     try{
         const wallet = await walletDB.findOne({user_id: req.session.user_id});
         const receipt = wallet.receipts.pull();
+        console.log((receipt));
         res.status(200).send(receipt[receipt.length - 1]);  //전체 receipt에서 마지막 index 반환
     }
     catch(e) {
@@ -60,21 +62,28 @@ const recentReceipt = async (req, res) => {
     }
 }
 
-// const mostFrequentStation = async (req, res) => {
-//     try{
-//         const wallet = await walletDB.findOne({user_id: req.session.user_id});
-//         // const receipt = wallet.receipts.pull();
-        
-//         console.log(count);
-//         res.status(200).send();
-//     }
-//     catch(e){
-//         console.log(e);
-//         res.status(401).send();
-//     }
-// }
+const mostVisitedStation = async (req, res) => {
+    try{
+        const wallet = await walletDB.aggregate([
+            { $match: { user_id: req.session.user_id }},
+            { $unwind: '$receipts' },
+            { $group: { _id: '$receipts.station_id', total: { $sum: 1}}},
+            { $sort: { total: -1 }}
+        ]);
 
-// router.get('/frequent', mostFrequentStation);
+        const station = await stationDB.findOne({ station_id: wallet[0]._id }, { _id: 0, name: 1 });
+
+        const result = { station_name: station.name, station_total: wallet[0].total };
+
+        res.status(200).json(result);
+    }
+    catch(e){
+        console.log(e);
+        res.status(401).send();
+    }
+}
+
+router.get('/most-visited', mostVisitedStation);
 router.post('/', makeReceipt);
 router.get('/', getAllReceipt);
 router.get('/recent', recentReceipt);
