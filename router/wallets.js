@@ -17,6 +17,8 @@ const makeReceipt = async (req, res) => { //station을 특정할 수 있는 key 
         const point = getPoint(req.body);
         wallet.receipts.push({
             station_id: req.body.station_id,
+            station_name: (await stationDB.findOne({ station_id: req.body.station_id })).name,
+            
             point: point,
 
             plastic_weight: req.body.weights.plastic,
