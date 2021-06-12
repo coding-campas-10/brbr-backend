@@ -4,7 +4,8 @@ import dotenv from 'dotenv';
 dotenv.config('../');
 
 const receiptSchema = new mongoose.Schema({
-    station_id: { type: Number, required: false, unique: false },
+    station_id: { type: Number, required: true, unique: false },
+    station_name: { type: String, required: true, unique: false },
 
     plastic_weight: { type: Number, required: false, unique: false },
     paper_weight: { type: Number, required: false, unique: false },
