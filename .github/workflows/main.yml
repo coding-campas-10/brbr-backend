@@ -17,6 +17,6 @@ jobs:
       run: 
         yarn
         
-    - name: remove bin
+    - name: start
       run:
-        yarn start
+        nodemon
