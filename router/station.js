@@ -20,7 +20,7 @@ const addNewStation = async (req, res) => {
             }
         })
         await newStation.save();
-        res.status(200).send();
+        res.status(201).send();
         return;
     }
     catch(e){
