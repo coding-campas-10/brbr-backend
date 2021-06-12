@@ -33,11 +33,8 @@ const getBarcode = async (req, res) => {
     })
     try{
         await newCode.save()
-        res
-            .status(200)
-            .header('Content-Type', 'image/svg')
-            .header('Content-disposition', `attachment; filename=${encodeURI('barcode.svg')}`)
-            .send(xmlSerializer.serializeToString(svgNode));
+        let svgBarcode = xmlSerializer.serializeToString(svgNode).replace(/"/g, "'");
+        res.status(200).json({svg: svgBarcode, code: barcode});
         return;
     }
     catch(e){
