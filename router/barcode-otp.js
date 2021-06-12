@@ -16,7 +16,7 @@ const getBarcode = async (req, res) => {
         const uid= req.session.user_id;
     }
     catch(e) {
-        res.status(401).send(e);
+        res.status(401).send();
         return;
     }
     const barcode= Math.random().toString(36).substr(2, 10);
