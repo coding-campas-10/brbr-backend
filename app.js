@@ -19,7 +19,7 @@ configure('views',{
     express:app,
 })
 
-app.use(morgan('dev'));
+//app.use(morgan('dev'));
 app.use(express.json());
 app.use(morgan(`HTTP/:http-version :method :remote-addr 
     :url :remote-user :status :res[content-length] 
