@@ -58,14 +58,18 @@ const register = async (req, res) => {  //회원가입 되어있으면 401 반�
 }
 
 const logout = (req, res) => {  //우리측 세션만 만료
-    logger.info(`user ${req.session.user_id} logout`);
-    req.session.destroy();
-    res.status(204).send('로그아웃 성공');
+    if (req.session.user_id){
+        logger.info(`user ${req.session.user_id} logout`);
+        req.session.destroy();
+        res.status(204).send('로그아웃 성공');
+    }
+    else{
+        res.status(400).send('로그아웃 불가');
+    }
 }
 
 const getUserInfo = async (req, res) => {
     try{
-        console.log(req.session);
         const exUser = await userDB.findOne({user_id: req.session.user_id}, {_id:0, user_id:1, name:1, connected_at:1});
         if(!exUser) { return res.status(401).send('계정 정보를 찾을 수 없습니다.')};
         res.status(200).send(exUser);
