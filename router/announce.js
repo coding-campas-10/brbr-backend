@@ -16,7 +16,7 @@ const addNewAnnounce = async (req, res) => {
             description: body.description
         })
         await newStation.save();
-        res.status(200).send();
+        res.status(201).send();
          
     }
     catch(e){
