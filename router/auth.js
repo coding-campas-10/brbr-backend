@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import userDB from '../database/models/userSchema.js';
 import walletDB from '../database/models/walletSchema.js';
+
 import { logger } from '../logger.js';
 
 const router = express.Router();
@@ -49,7 +50,7 @@ const register = async (req, res) => {  //회원가입 되어있으면 401 반�
         await registerWallet.save();
 
         req.session.user_id = req.body.user_id;
-        res.status(200).json(exUser);
+        res.status(200).json(await userDB.findOne({user_id: req.body.user_id}, {_id:0, user_id:1, name:1, connected_at:1}));
     }
     catch(e){
         logger.error(e);
