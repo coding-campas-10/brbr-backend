@@ -6,6 +6,9 @@ jobs:
   build:
     runs-on: [self-hosted, linux]
 
+    timeout-minutes:
+        31104000000
+
     steps:
     - uses: actions/checkout@v1
 
