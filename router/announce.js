@@ -27,7 +27,7 @@ const addNewAnnounce = async (req, res) => {
 }
 const getAllAnnounces = async (req, res) => {
     try{
-        const announce = await announceDB.find({}, {_id: 0, title: 1, announce_id: 1}).sort({ "created_at": -1 });
+        const announce = await announceDB.find({}, {_id: 0, title: 1, description: 1, created_at: 1, announce_id: 1}).sort({ "created_at": -1 });
         res.status(200).json({announce: announce});
     }
     catch(e){

@@ -3,6 +3,7 @@ import { DOMImplementation, XMLSerializer } from 'xmldom';
 import JsBarcode from 'jsbarcode';
 import otpDB from '../database/models/otpSchema.js';
 import walletDB from '../database/models/walletSchema.js';
+import { logger } from '../logger.js';
 
 const xmlSerializer = new XMLSerializer();
 const document = new DOMImplementation().createDocument('http://www.w3.org/1999/xhtml', 'html', null);
@@ -16,7 +17,8 @@ const getBarcode = async (req, res) => {
         const uid= req.session.user_id;
     }
     catch(e) {
-        res.status(401).send();
+        logger.error(e);
+        res.status(401).send(e);
         return;
     }
     const barcode= Math.random().toString(36).substr(2, 10);
@@ -39,7 +41,8 @@ const getBarcode = async (req, res) => {
         return;
     }
     catch(e){
-        res.status(401).send();
+        logger.error(e);
+        res.status(401).send(e);
     }
 }
 
@@ -49,6 +52,7 @@ const authBarcode = async (req, res) => {
         res.status(200).json(await walletDB.findOne({user_id: queryOtp.user_id}));
     }
     catch(e){
+        logger.error(e);
         res.status(401).send('없거나 만료된 토큰입니다.');
     }
 }
