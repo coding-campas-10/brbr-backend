@@ -53,11 +53,9 @@ const recentReceipt = async (req, res) => {
     try{
         const wallet = await walletDB.findOne({user_id: req.session.user_id});
         const receipt = wallet.receipts.pull();
-        console.log((receipt));
         res.status(200).send(receipt[receipt.length - 1]);  //전체 receipt에서 마지막 index 반환
     }
     catch(e) {
-        console.log(e);
         res.status(401).send(e);
     }
 }
