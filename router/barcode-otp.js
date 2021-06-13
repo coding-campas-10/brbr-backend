@@ -34,7 +34,9 @@ const getBarcode = async (req, res) => {
     try{
         await newCode.save()
         let svgBarcode = xmlSerializer.serializeToString(svgNode).replace(/"/g, "'");
-        res.status(200).json({svg: svgBarcode, code: barcode});
+        let time= new Date()
+        time.setSeconds(time.getSeconds()+50)
+        res.status(200).json({svg: svgBarcode, code: barcode, ttl: time});
         return;
     }
     catch(e){
