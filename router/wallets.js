@@ -13,7 +13,8 @@ const getPoint = (body) => {
 
 const makeReceipt = async (req, res) => { //station을 특정할 수 있는 key 필요
     try{
-        const wallet = await walletDB.findOne({ user_id: req.session.user_id });
+        const user_id = req.session.user_id || req.body.user_id;
+        const wallet = await walletDB.findOne({ user_id: user_id });
         const point = getPoint(req.body);
         wallet.receipts.push({
             station_id: req.body.station_id,
@@ -27,7 +28,7 @@ const makeReceipt = async (req, res) => { //station을 특정할 수 있는 key 
             styrofoam_weight: req.body.weights.styrofoam,
             etc_weight: req.body.weights.etc,
         })
-        await walletDB.updateOne({ user_id: req.session.user_id }, {
+        await walletDB.updateOne({ user_id: user_id }, {
             total_points: wallet.total_points + point
         });
         await wallet.save()
