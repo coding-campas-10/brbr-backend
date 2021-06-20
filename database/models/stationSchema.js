@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import autoIncrement from 'mongoose-auto-increment';
 
 const stationSchema = new mongoose.Schema({
-    name: { type: String, required: true, unique: false },
+    name: { type: String, required: true, unique: true },
     station_id: { type: Number, required: true, unique: true },
     description: { type: String, required: true, unique: false },
     location: {

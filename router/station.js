@@ -16,7 +16,7 @@ const addNewStation = async (req, res) => {
             description: body.description,
             location: { 
                 type: 'Point',
-                coordinates: [body.location.lng, body.location.lat] //경도, 위도 순서
+                coordinates: [body.location[1], body.location[0]] //경도, 위도 순서
             }
         })
         await newStation.save();
