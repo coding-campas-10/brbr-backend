@@ -77,7 +77,7 @@ const getNearestStation = async (req, res) => {
         const query = (await stationDB.aggregate([{
             $geoNear: {
                 spherical: true,
-                maxDistance: 10000,
+                maxDistance: 3000,
                 near: {
                   type: 'Point',
                   coordinates: [req.body.location.lng, req.body.location.lat]
@@ -88,7 +88,8 @@ const getNearestStation = async (req, res) => {
         }, {
             $limit: 1
         }]))[0];
-        res.status(200).json(query);
+        if (!query) { return res.status(204).send() };
+        return res.status(200).json(query);
     }
     catch(e){
         console.log(e);
