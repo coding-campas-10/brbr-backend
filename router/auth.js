@@ -49,6 +49,7 @@ const register = async (req, res) => {  //회원가입 되어있으면 401 반�
         await registerUser.save();
         await registerWallet.save();
 
+        logger.info(`user ${req.body.user_id} registerd`);
         req.session.user_id = req.body.user_id;
         res.status(200).json(await userDB.findOne({user_id: req.body.user_id}, {_id:0, user_id:1, name:1, connected_at:1}));
     }
